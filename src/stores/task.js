@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { Notify } from 'quasar'
 import axios from 'config/axios'
 
 export const useTaskStore = defineStore('task', {
@@ -17,9 +18,16 @@ export const useTaskStore = defineStore('task', {
     async fetchTasks() {
       try {
         const response = await axios.get('/task/list/1')
+        if (!response.data.success) {
+          throw new Error(response.message)
+        }
         this.tasks = response.data.tasks
       } catch (error) {
-        console.error('Error fetching tasks:', error)
+        Notify.create({
+          message: 'Error fetching tasks',
+          color: 'negative',
+          position: 'top-right',
+        })
         throw error
       }
     },
@@ -29,10 +37,22 @@ export const useTaskStore = defineStore('task', {
      */
     async createTask(payload) {
       try {
-        await axios.post('/task/create', payload)
+        const response = await axios.post('/task/create', payload)
+        if (!response.data.success) {
+          throw new Error(response.message)
+        }
+        Notify.create({
+          message: 'Task created successfully',
+          color: 'positive',
+          position: 'top-right',
+        })
         await this.fetchTasks()
       } catch (error) {
-        console.error('Error create task:', error)
+        Notify.create({
+          message: 'Error creating task',
+          color: 'negative',
+          position: 'top-right',
+        })
         throw error
       }
     },
@@ -42,10 +62,22 @@ export const useTaskStore = defineStore('task', {
      */
     async updateTask(id, payload) {
       try {
-        await axios.put(`/task/update/${id}`, payload)
+        const response = await axios.put(`/task/update/${id}`, payload)
+        if (!response.data.success) {
+          throw new Error(response.message)
+        }
+        Notify.create({
+          message: 'Task updated successfully',
+          color: 'positive',
+          position: 'top-right',
+        })
         await this.fetchTasks()
       } catch (error) {
-        console.error('Error update task:', error)
+        Notify.create({
+          message: 'Error updating task',
+          color: 'negative',
+          position: 'top-right',
+        })
         throw error
       }
     },
@@ -55,10 +87,22 @@ export const useTaskStore = defineStore('task', {
      */
     async deleteTask(id) {
       try {
-        await axios.delete(`/task/delete/${id}`)
+        const response = await axios.delete(`/task/delete/${id}`)
+        if (!response.data.success) {
+          throw new Error(response.message)
+        }
         await this.fetchTasks()
+        Notify.create({
+          message: 'Task deleted successfully',
+          color: 'positive',
+          position: 'top-right',
+        })
       } catch (error) {
-        console.error('Error delete task:', error)
+        Notify.create({
+          message: 'Error deleting task',
+          color: 'negative',
+          position: 'top-right',
+        })
         throw error
       }
     },
@@ -68,10 +112,22 @@ export const useTaskStore = defineStore('task', {
      */
     async completeTask(id) {
       try {
-        await axios.put(`/task/complete/${id}`)
+        const response = await axios.put(`/task/complete/${id}`)
+        if (!response.data.success) {
+          throw new Error(response.message)
+        }
         await this.fetchTasks()
+        Notify.create({
+          message: 'Task completed successfully',
+          color: 'positive',
+          position: 'top-right',
+        })
       } catch (error) {
-        console.error('Error complete task:', error)
+        Notify.create({
+          message: 'Error completing task',
+          color: 'negative',
+          position: 'top-right',
+        })
         throw error
       }
     },
@@ -81,10 +137,22 @@ export const useTaskStore = defineStore('task', {
      */
     async uncompleteTask(id) {
       try {
-        await axios.put(`/task/incomplete/${id}`)
+        const response = await axios.put(`/task/incomplete/${id}`)
+        if (!response.data.success) {
+          throw new Error(response.message)
+        }
         await this.fetchTasks()
+        Notify.create({
+          message: 'Task uncompleted successfully',
+          color: 'positive',
+          position: 'top-right',
+        })
       } catch (error) {
-        console.error('Error uncomplete task:', error)
+        Notify.create({
+          message: 'Error uncompleting task',
+          color: 'negative',
+          position: 'top-right',
+        })
         throw error
       }
     },

@@ -46,11 +46,11 @@ const submit = () => {
     description: description.value,
   })
   closeDialog()
-  title.value = ''
-  description.value = ''
 }
 
 const closeDialog = () => {
+  title.value = ''
+  description.value = ''
   emit('close')
 }
 </script>
