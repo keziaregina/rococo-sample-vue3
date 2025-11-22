@@ -1,11 +1,11 @@
 const routes = [
   {
     path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    component: () => import('src/pages/Layout/MainLayout.vue'),
     children: [
       {
         path: 'dashboard',
-        component: () => import('pages/IndexPage.vue'),
+        component: () => import('src/pages/IndexPage.vue'),
         meta: { requiresAuth: true },
       },
     ],
