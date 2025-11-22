@@ -244,9 +244,8 @@ export const useAuthStore = defineStore('auth', {
      * Update user profile data
      */
     async updateUser(userData) {
-      const entity_id = this.user.entity_id
       try {
-        const response = await axios.put(`/person/me/update/${entity_id}`, userData)
+        const response = await axios.put(`/person/me/update`, userData)
         if (response.data?.success) {
           this.user = { ...this.user, ...userData }
           localStorageService.setItem(STORAGE_KEYS.USER, this.user)
