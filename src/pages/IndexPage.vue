@@ -24,7 +24,7 @@
               <q-list>
                 <q-item tag="label">
                   <q-item-section avatar>
-                    <q-checkbox v-model="isCompleted" @update:model-value="filterTasks()" />
+                    <q-checkbox v-model="selectedFilter" @update:model-value="filterTasks()" />
                   </q-item-section>
                   <q-item-section>
                     <q-item-label>Completed Tasks</q-item-label>
@@ -113,9 +113,24 @@ const openAddDialog = ref(false)
 const openEditDialog = ref(false)
 const selectedTask = ref(null)
 const openDeleteDialog = ref(false)
-const isCompleted = ref(false)
 
 const tasks = ref([])
+
+const selectedFilter = ref('all')
+const filters = [
+  {
+    label: 'All Tasks',
+    value: 'all',
+  },
+  {
+    label: 'Completed Tasks',
+    value: 'completed',
+  },
+  {
+    label: 'Incomplete Tasks',
+    value: 'incomplete',
+  },
+]
 
 onMounted(async () => {
   await taskStore.fetchTasks()
@@ -158,9 +173,11 @@ const handleDeleteTask = async (id) => {
 }
 
 const filterTasks = () => {
-  isCompleted.value = !!isCompleted.value
-  if (isCompleted.value) {
+  selectedFilter.value = !!selectedFilter.value
+  if (selectedFilter.value === 'completed') {
     tasks.value = taskStore.tasksList.filter((task) => task.is_complete)
+  } else if (selectedFilter.value === 'incomplete') {
+    tasks.value = taskStore.tasksList.filter((task) => !task.is_complete)
   } else {
     tasks.value = taskStore.tasksList
   }
