@@ -1,6 +1,6 @@
 <template>
   <div class="text-h6">
-    Hi {{ authStore.user.first_name }} {{ authStore.user.last_name }}, ready to work?
+    Hi {{ authStore.user.first_name || '' }} {{ authStore.user.last_name || '' }}, ready to work?
   </div>
 
   <div v-if="taskStore.tasksList.length === 0">
@@ -19,20 +19,18 @@
         <div class="text-h6">Task List</div>
         <div class="flex justify-center q-gutter-sm">
           <q-btn color="primary" label="Add Task" @click="addTask" />
-          <q-btn color="primary" icon="filter_list">
-            <q-menu>
-              <q-list>
-                <q-item tag="label">
-                  <q-item-section avatar>
-                    <q-checkbox v-model="selectedFilter" @update:model-value="filterTasks()" />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Completed Tasks</q-item-label>
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
-          </q-btn>
+          <q-select
+            v-model="selectedFilter"
+            :options="filters"
+            option-label="label"
+            option-value="value"
+            dense
+            filled
+            emit-value
+            map-options
+            @update:model-value="filterTasks"
+            style="min-width: 180px"
+          />
         </div>
       </q-card-section>
       <q-separator inset />
@@ -52,9 +50,11 @@
               <q-checkbox
                 v-model="task.is_complete"
                 v-on:update:model-value="
-                  task.is_complete
+                  task.is_complete == true
                     ? taskStore.completeTask(task.entity_id)
-                    : taskStore.uncompleteTask(task.entity_id)
+                    : task.is_complete == false
+                      ? taskStore.uncompleteTask(task.entity_id)
+                      : taskStore.fetchTasks()
                 "
               />
             </div>
@@ -173,7 +173,6 @@ const handleDeleteTask = async (id) => {
 }
 
 const filterTasks = () => {
-  selectedFilter.value = !!selectedFilter.value
   if (selectedFilter.value === 'completed') {
     tasks.value = taskStore.tasksList.filter((task) => task.is_complete)
   } else if (selectedFilter.value === 'incomplete') {
