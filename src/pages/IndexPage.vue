@@ -1,5 +1,7 @@
 <template>
-  <div>Hi Kezia, ready to work?</div>
+  <div class="text-h6">
+    Hi {{ authStore.user.first_name }} {{ authStore.user.last_name }}, ready to work?
+  </div>
 
   <div v-if="taskStore.tasksList.length === 0">
     <q-card class="q-mt-md flex flex-center" style="min-height: 200px">
@@ -103,7 +105,9 @@ import { useTaskStore } from 'stores/task'
 import { ref, onMounted } from 'vue'
 import AddTaskModal from 'src/components/Task/AddTaskModal.vue'
 import EditTaskModal from 'src/components/Task/EditTaskModal.vue'
+import { useAuthStore } from 'src/stores/auth'
 
+const authStore = useAuthStore()
 const taskStore = useTaskStore()
 const openAddDialog = ref(false)
 const openEditDialog = ref(false)

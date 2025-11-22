@@ -243,9 +243,25 @@ export const useAuthStore = defineStore('auth', {
     /**
      * Update user profile data
      */
-    updateUser(userData) {
-      this.user = { ...this.user, ...userData }
-      localStorageService.setItem(STORAGE_KEYS.USER, this.user)
+    async updateUser(userData) {
+      const entity_id = this.user.entity_id
+      try {
+        const response = await axios.put(`/person/me/update/${entity_id}`, userData)
+        if (response.data?.success) {
+          this.user = { ...this.user, ...userData }
+          localStorageService.setItem(STORAGE_KEYS.USER, this.user)
+          Notify.create({
+            message: 'User updated successfully',
+            color: 'positive',
+            position: 'top-right',
+            timeout: 3000,
+          })
+        } else {
+          this.showErrorNotification(response.data?.message)
+        }
+      } catch (error) {
+        return this.handleApiError(error, 'Failed to update user')
+      }
     },
 
     /**
