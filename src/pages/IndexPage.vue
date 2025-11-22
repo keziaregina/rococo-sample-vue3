@@ -1,6 +1,6 @@
 <template>
   <div class="text-h6">
-    Hi {{ authStore.user.first_name || '' }} {{ authStore.user.last_name || '' }}, ready to work?
+    Hi {{ authStore.user?.first_name || '' }} {{ authStore.user?.last_name || '' }}, ready to work?
   </div>
 
   <div v-if="taskStore.tasksList.length === 0">
@@ -36,7 +36,7 @@
       <q-separator inset />
       <q-card-section>
         <div v-if="tasks.length === 0">
-          <div class="text-center">No completed tasks found</div>
+          <div class="text-center">No tasks found</div>
         </div>
         <div v-else>
           <q-card
