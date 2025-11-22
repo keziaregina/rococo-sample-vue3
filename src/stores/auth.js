@@ -42,6 +42,8 @@ export const useAuthStore = defineStore('auth', {
     userRole: (state) => state.user?.role || null,
 
     userName: (state) => state.user?.name || null,
+
+    getAuthData: (state) => state.user,
   },
 
   actions: {
@@ -79,7 +81,7 @@ export const useAuthStore = defineStore('auth', {
       Notify.create({
         message,
         color: 'negative', // Using 'negative' instead of 'danger' for Quasar consistency
-        position: 'top',
+        position: 'top-right',
         timeout: 5000,
       })
     },
@@ -105,7 +107,7 @@ export const useAuthStore = defineStore('auth', {
           Notify.create({
             message: 'Account created successfully!',
             color: 'positive',
-            position: 'top',
+            position: 'top-right',
             timeout: 3000,
           })
           return true
@@ -155,7 +157,7 @@ export const useAuthStore = defineStore('auth', {
           Notify.create({
             message: 'Password reset email sent!',
             color: 'positive',
-            position: 'top',
+            position: 'top-right',
             timeout: 5000,
           })
           return true
@@ -228,7 +230,7 @@ export const useAuthStore = defineStore('auth', {
           Notify.create({
             message: 'Logged out successfully',
             color: 'info',
-            position: 'top',
+            position: 'top-right',
             timeout: 2000,
           })
         }
@@ -252,9 +254,9 @@ export const useAuthStore = defineStore('auth', {
     async loginWithOAuth(provider, payload) {
       try {
         return await handleOAuthRequest(
-          this, 
-          () => axios.post(`/auth/${provider}/exchange`, payload), 
-          this.router
+          this,
+          () => axios.post(`/auth/${provider}/exchange`, payload),
+          this.router,
         )
       } catch (error) {
         return this.handleApiError(error, 'OAuth login failed')
