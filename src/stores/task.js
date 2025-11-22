@@ -1,6 +1,9 @@
 import { defineStore } from 'pinia'
 import { Notify } from 'quasar'
 import axios from 'config/axios'
+import { useAuthStore } from 'stores/auth'
+
+const authStore = useAuthStore()
 
 export const useTaskStore = defineStore('task', {
   state: () => ({
@@ -17,7 +20,7 @@ export const useTaskStore = defineStore('task', {
      */
     async fetchTasks() {
       try {
-        const response = await axios.get('/task/list/1')
+        const response = await axios.get(`/task/list/${authStore.user.entity_id}`)
         if (!response.data.success) {
           throw new Error(response.message)
         }
